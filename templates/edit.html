@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Edit Item</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ items.name }}</h2>
+        <h2>{{ items.category }}</h2>
+        <h2>{{ items.cuisine }}</h2>
+        <h2>{{ items.cost }}</h2>
+    </div>
+{% endblock content %}
