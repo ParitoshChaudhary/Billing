@@ -42,6 +42,7 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="inputState">Cost</label>
                 <input type="text" class="form-control" placeholder="Cost" name="cost">
             </div>
             <button type="submit" class="btn btn-primary">Add Item</button>
@@ -73,5 +74,23 @@
                 {% endif %}
             </tbody>
         </table>
+
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link" href="#"> << </a>
+              </li>
+              {% if items.has_previous %}
+                <li class="page-item"><a class="page-link" href="?pg={{items.previous_page_number}}">{{items.previous_page_number}}</a></li>
+              {% endif %}
+              <li class="page-item"><a class="page-link" href="?pg={{items.number}}">{{items.number}}</a></li>
+              {% if items.has_next %}
+                <li class="page-item"><a class="page-link" href="?pg={{ items.next_page_number }}">{{ items.next_page_number }}</a></li>
+              {% endif %}
+              <li class="page-item">
+                <a class="page-link" href="?pg={{ items.paginator.num_pages }}"> >> </a>
+              </li>
+            </ul>
+        </nav>
     </div>
 {% endblock content%}
