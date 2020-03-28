@@ -8,6 +8,37 @@
 {% block content %}
     <br>
     <div class="container">
+        <form method="get">
+          {{ filter.form | crispy }}
+          <button class="btn btn-primary" name="submit">Search</button>
+        </form>
+        <br>
+        {% if bill_list %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Cost</th>
+                  <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for item in bill_list%}
+              <tr>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.category }}</td>
+                  <td>{{ item.cost }}</td>
+                  <td>
+                    <button class="btn btn-danger" name="submit">Remove</button>
+                  </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {% endif %}
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -16,6 +47,7 @@
                     <th scope="col">Cuisine</th>
                     <th scope="col">Category</th>
                     <th scope="col">Cost</th>
+                    <th scope="col">Options</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +58,12 @@
                         <td>{{ item.cuisine }}</td>
                         <td>{{ item.category }}</td>
                         <td>{{ item.cost }}</td>
+                        <td>
+                          <button class="btn btn-success" name="submit">
+                            <a href="{% url 'add_item_to_bill' item.id %}">Add</a>
+                          </button>
+                          <button class="btn btn-danger" name="submit">Remove</button>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

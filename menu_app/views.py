@@ -4,6 +4,7 @@ from menu_app.models import Item as ItemList, Category, Cuisine
 from menu_app.forms import ItemForm, CategoryForm, CuisineForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from menu_app.filters import ItemFilter
 
 
 # Create your views here.
@@ -12,14 +13,20 @@ def menu_list(request):
     item_list = ItemList.objects.all()
     category = Category.objects.all()
     cuisine = Cuisine.objects.all()
-    context = {
-        'items': item_list,
-        'category': category,
-        'cuisine': cuisine
-    }
+
+    filter = ItemFilter(request.GET, queryset = item_list)
+    item_list = filter.qs
+
     paginator = Paginator(item_list, 10)
     page = request.GET.get('pg')
     item_list = paginator.get_page(page)
+
+    context = {
+        'items': item_list,
+        'category': category,
+        'cuisine': cuisine,
+        'filter' : filter
+    }
     return render(request, 'menu_list.html', context)
 
 
@@ -96,3 +103,14 @@ def delete_item(request, item_id):
     item = ItemList.objects.get(pk=item_id)
     item.delete()
     return redirect('add_item')
+
+
+def add_item_to_bill(request, item_id):
+    billItemList = []
+    item = ItemList.objects.get(pk=item_id)
+    billItemList.append(item)
+    context = {
+        'bill_list' : billItemList
+    }
+    print(billItemList)
+    return render(request, 'menu_list.html', context)
