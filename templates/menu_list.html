@@ -30,7 +30,7 @@
                   <td>{{ item.category }}</td>
                   <td>{{ item.cost }}</td>
                   <td>
-                    <button class="btn btn-danger" name="submit">Remove</button>
+                    <a href="{% url 'delete_item_from_bill' item.name %}" class="btn btn-danger">Remove</a>
                   </td>
               </tr>
               {% endfor %}
@@ -59,9 +59,7 @@
                         <td>{{ item.category }}</td>
                         <td>{{ item.cost }}</td>
                         <td>
-                          <button class="btn btn-success" name="submit">
-                            <a href="{% url 'add_item_to_bill' item.id %}">Add</a>
-                          </button>
+                          <a href = "{% url 'add_item_to_bill' item.id %}" class="btn btn-success">Add</a>
                           <button class="btn btn-danger" name="submit">Remove</button>
                         </td>
                     </tr>

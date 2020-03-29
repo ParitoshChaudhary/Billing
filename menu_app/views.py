@@ -8,6 +8,7 @@ from menu_app.filters import ItemFilter
 
 
 # Create your views here.
+billItemList = []
 @login_required
 def menu_list(request):
     item_list = ItemList.objects.all()
@@ -106,11 +107,20 @@ def delete_item(request, item_id):
 
 
 def add_item_to_bill(request, item_id):
-    billItemList = []
+    global billItemList
     item = ItemList.objects.get(pk=item_id)
+    print(type(item))
     billItemList.append(item)
     context = {
         'bill_list' : billItemList
     }
     print(billItemList)
     return render(request, 'menu_list.html', context)
+
+
+def delete_item_from_bill(request, item_name):
+    global billItemList
+    for item in billItemList:
+        if item.name == item_name:
+            billItemList.remove(item)
+    return redirect('menu_list')
