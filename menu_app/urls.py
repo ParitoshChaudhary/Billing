@@ -7,5 +7,7 @@ urlpatterns = [
     path('delete/<item_id>', views.delete_item, name='delete_item'),
     path('addtobill/<item_id>', views.add_item_to_bill, name='add_item_to_bill'),
     path('delfrombill/<item_name>', views.delete_item_from_bill, name='delete_item_from_bill'),
-    path('edit/<item_id>', views.edit_item, name='edit_item')
+    path('generatebill/', views.generate_bill, name='generate_bill'),
+    path('edit/<item_id>', views.edit_item, name='edit_item'),
+    path('getcost/', views.get_cost, name='get_cost')
 ]

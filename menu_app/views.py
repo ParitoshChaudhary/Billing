@@ -124,3 +124,25 @@ def delete_item_from_bill(request, item_name):
         if item.name == item_name:
             billItemList.remove(item)
     return redirect('menu_list')
+
+
+def generate_bill(request):
+    global billItemList
+    context = {
+        'bill_list' : billItemList
+    }
+    print(billItemList)
+    return render(request, 'bill.html', context)
+
+def get_cost(request):
+    cost = []
+    if len(billItemList):
+        for item in billItemList:
+            cost.append(item.cost)
+        print(cost)
+        total = sum(cost)
+        print(total)
+        context = {
+            'total_amt' : total
+        }
+    return render(request, 'bill.html', context)

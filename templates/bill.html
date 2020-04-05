@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  <title>Bill - Restaurant App</title>
+{% endblock title %}
+
+{% block content %}
+  <br>
+  <div class="container">
+    {% if bill_list %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for item in bill_list %}
+          <tr>
+              <td>{{ item.name }}</td>
+              <td>{{ item.category }}</td>
+              <td>{{ item.cost }}</td>
+              <td>
+                <a href="{% url 'delete_item_from_bill' item.name %}" class="btn btn-danger">Remove</a>
+              </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'get_cost' %}" class='btn btn-primary'>Generate Bill</a>
+    <h3>Total Amount to be paid : {{ total_amt }}</h3>
+    <br>
+    {% else %}
+      <h2>"No Data Available"</h2>
+    {% endif %}
+
+  </div>
+{% endblock content %}

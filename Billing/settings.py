@@ -72,6 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Billing.wsgi.application'
+AUTH_USER_MODEL = "user_app.Restraunt"
 
 
 # Database
