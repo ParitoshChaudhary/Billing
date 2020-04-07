@@ -80,8 +80,10 @@ AUTH_USER_MODEL = "user_app.Restraunt"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'billing_db',
+        # 'ENGINE': 'djongo',
+        # 'NAME': 'billing_db',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'billingDB',
     }
 }
 
