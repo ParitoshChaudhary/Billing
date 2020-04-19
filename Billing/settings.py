@@ -73,6 +73,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Billing.wsgi.application'
 AUTH_USER_MODEL = "user_app.Restraunt"
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.RemoteUserBackend',
+        'django.contrib.auth.backends.ModelBackend',
+)
 
 
 # Database
@@ -80,10 +84,10 @@ AUTH_USER_MODEL = "user_app.Restraunt"
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'djongo',
-        # 'NAME': 'billing_db',
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'billingDB',
+        'ENGINE': 'djongo',
+        'NAME': 'billing_db',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'billing.sqlite3')
     }
 }
 

@@ -3,99 +3,71 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 # Create your models here.
 class RestrauntManager(BaseUserManager):
-    def create_user(self, username, email, phone, restraunt_name,
-                    is_staff=False, is_admin=False, is_active=True, password=None):
+    def create_user(self, email, username, phone, restraunt_name, password=None, commit=True):
         if not email:
-            raise ValueError('User must have an email address')
+            raise ValueError('Email is required')
+        
         if not username:
-            raise ValueError('User must have a username')
-        if not password:
-            raise ValueError('User must have a password')
+            raise ValueError('Username is required')
+        
         if not phone:
-            raise ValueError('User must have a phone number')
+            raise ValueError('Phone is required')
+        
         if not restraunt_name:
-            raise ValueError('User must have a restraunt name')
-
+            raise ValueError('Restraunt name is required')
+        
         user = self.model(
-                email = self.normalize_email(email),
-                username = username,
-                phone = phone,
-                restraunt_name = restraunt_name
+            email = self.normalize_email(email),
+            username = username,
+            phone = phone,
+            restraunt_name = restraunt_name,
         )
         user.set_password(password)
-        user.staff = is_staff
-        user.active = is_active
-        user.admin = is_admin
-        user.save(using=self._db)
+        if commit:
+            user.save(using=self._db)
         return user
-
-    def create_staffuser(self, email, username, phone, restraunt_name, password=None):
-        user = self.create_user(
-                email = self.normalize_email(email),
-                username = username,
-                phone = phone,
-                restraunt_name = restraunt_name,
-                is_staff = True
-        )
-        return user
-
+    
     def create_superuser(self, email, username, phone, restraunt_name, password=None):
         user = self.create_user(
-                email = self.normalize_email(email),
-                username = username,
-                phone = phone,
-                restraunt_name = restraunt_name,
-                password = password,
-                is_staff = True,
-                is_admin = True
+            email = self.normalize_email(email),
+            username = username,
+            phone = phone,
+            restraunt_name = restraunt_name,
+            commit=False,
+            password=password,
         )
+        user.is_staff = True
+        user.is_admin = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
 class Restraunt(PermissionsMixin, AbstractBaseUser):
-    email = models.EmailField(verbose_name = 'email', max_length=60, unique=True)
-    username = models.CharField(verbose_name='username', max_length=30, unique=True)
-    # password = models.CharField(verbose_name='password', max_length=32)
-    phone = models.CharField(verbose_name='phone', max_length=14)
-    manager_name = models.CharField(verbose_name='manager_name', max_length=20)
-    restraunt_name = models.CharField(verbose_name='restraunt_name', max_length=35)
-    address = models.CharField(verbose_name='address', max_length=150, unique=True)
-    added_at = models.DateTimeField(auto_now_add=True)
-    admin = models.BooleanField(default=False)
-    staff = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
+    email = models.EmailField(verbose_name='email', unique=True)
+    username = models.CharField(verbose_name='username', unique=True, max_length=25)
+    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    phone = models.CharField(verbose_name='phone number', max_length=13)
+    restraunt_name = models.CharField(verbose_name='restraunt name', max_length=60)
+    address = models.CharField(verbose_name='address', max_length=150)
+    manager_name = models.CharField(verbose_name='manager', max_length=50)
+    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'phone', 'restraunt_name']
-
+    REQUIRED_FIELDS = ['email', 'phone', 'restraunt_name',]
+    
     objects = RestrauntManager()
 
     def __str__(self):
-        return self.username
-
-    def get_full_name(self):
-        return self.manager_name
-
-    def get_short_name(self):
         return self.restraunt_name
-
+    
     def has_perm(self, perm, obj=None):
+        return self.is_admin
+    
+    def has_module_perms(self, app_label):
         return True
-
-    def has_module_perm(self, app_label):
-        return True
-
-    @property
-    def is_staff(self):
-        "Is the user a member of staff?"
-        return self.staff
-
-    @property
-    def is_admin(self):
-        "Is the user an admin?"
-        return self.admin
-
-    @property
-    def is_active(self):
-        "Is the user active?"
-        return self.active
+    
+class Profile(models.Model):
+    user = models.OneToOneField(Restraunt, on_delete=models.CASCADE)
