@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from user_app.forms import RegisterForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -10,16 +13,35 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-def login(request):
+def loginUser(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('menu_list')
+        else:
+            messages.info(request, 'Username OR Password is incorrect')
     context = {
         'login_msg' : 'Welcome to the Login page'
     }
     return render(request, 'login.html', context)
 
 
-def register(request):
+def registerUser(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            user = form.changed_data.get('username')
+            messages.success(request, 'Profile created successfully for user ' + user)
+    else:
+        form = RegisterForm()
     context = {
-        'register' : 'This is registration page'
+        'form' : form
     }
     return render(request, 'register.html', context)
 
