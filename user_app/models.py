@@ -1,21 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 class RestrauntManager(BaseUserManager):
     def create_user(self, email, username, phone, restraunt_name, password=None, commit=True):
         if not email:
             raise ValueError('Email is required')
-        
+
         if not username:
             raise ValueError('Username is required')
-        
+
         if not phone:
             raise ValueError('Phone is required')
-        
+
         if not restraunt_name:
             raise ValueError('Restraunt name is required')
-        
+
         user = self.model(
             email = self.normalize_email(email),
             username = username,
@@ -26,7 +27,7 @@ class RestrauntManager(BaseUserManager):
         if commit:
             user.save(using=self._db)
         return user
-    
+
     def create_superuser(self, email, username, phone, restraunt_name, password=None):
         user = self.create_user(
             email = self.normalize_email(email),
@@ -57,17 +58,26 @@ class Restraunt(PermissionsMixin, AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'phone', 'restraunt_name',]
-    
+
     objects = RestrauntManager()
 
     def __str__(self):
         return self.restraunt_name
-    
+
     def has_perm(self, perm, obj=None):
         return self.is_admin
-    
+
     def has_module_perms(self, app_label):
         return True
-    
+
 class Profile(models.Model):
     user = models.OneToOneField(Restraunt, on_delete=models.CASCADE)
+
+
+class UserRestrauntManager(models.Model):
+    User = get_user_model()
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(max_length=200, null=True)
+    phone = models.IntegerField(max_length=13, null=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

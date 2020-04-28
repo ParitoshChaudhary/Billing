@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from user_app.forms import RegisterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from menu_app.decorators import check_authentication
 
 
 # Create your views here.
@@ -12,7 +13,7 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-
+@check_authentication
 def loginUser(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -31,13 +32,18 @@ def loginUser(request):
     return render(request, 'login.html', context)
 
 
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+@check_authentication
 def registerUser(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST or None)
         if form.is_valid():
             form.save()
-            user = form.changed_data.get('username')
-            messages.success(request, 'Profile created successfully for user ' + user)
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Profile created successfully for user ' + user.upper())
     else:
         form = RegisterForm()
     context = {

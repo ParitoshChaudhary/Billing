@@ -9,11 +9,12 @@ from menu_app.filters import ItemFilter
 
 # Create your views here.
 billItemList = []
-@login_required
+@login_required(login_url='login')
 def menu_list(request):
-    item_list = ItemList.objects.all()
-    category = Category.objects.all()
-    cuisine = Cuisine.objects.all()
+    print(request.user)
+    item_list = ItemList.objects.filter(added_by=request.user)
+    category = Category.objects.filter(added_by=request.user)
+    cuisine = Cuisine.objects.filter(added_by=request.user)
 
     filter = ItemFilter(request.GET, queryset = item_list)
     item_list = filter.qs
@@ -31,7 +32,7 @@ def menu_list(request):
     return render(request, 'menu_list.html', context)
 
 
-@login_required()
+@login_required(login_url='login')
 def add_item(request):
     if request.method == 'POST':
         print(request.POST)
@@ -43,10 +44,14 @@ def add_item(request):
             cui = cuisineform.save(commit=False)
             cat = catform.save(commit=False)
 
+            if catform.is_valid():
+                print('======== CAT FORM IS VALID')
+
             item.cuisine = Cuisine.objects.get(cuisine=cui)
             item.category = Category.objects.get(category_type=cat)
             item.name = request.POST.get('name')
             item.cost = request.POST.get('cost')
+            item.added_by = request.user
             item.save()
 
             messages.success(request, 'Item added successfully!!')
@@ -55,9 +60,10 @@ def add_item(request):
         return redirect('add_item')
 
     else:
-        item_list = ItemList.objects.all()
-        cuisine = Cuisine.objects.all()
-        categories = Category.objects.all()
+        print(request.user)
+        item_list = ItemList.objects.filter(added_by=request.user)
+        cuisine = Cuisine.objects.filter(added_by=request.user)
+        categories = Category.objects.filter(added_by=request.user)
         paginator = Paginator(item_list, 10)
         page = request.GET.get('pg')
         items = paginator.get_page(page)
@@ -69,6 +75,7 @@ def add_item(request):
         return render(request, 'add_item.html', context)
 
 
+@login_required(login_url='login')
 def edit_item(request, item_id):
     if request.method == 'POST':
         item = ItemList.objects.get(pk=item_id)
@@ -100,12 +107,54 @@ def edit_item(request, item_id):
         return render(request, 'edit.html', context)
 
 
+@login_required(login_url='login')
+def add_category(request):
+    if request.method == 'POST':
+        cat_form = CategoryForm(request.POST or None)
+        if cat_form.is_valid():
+            cat = cat_form.save(commit=False)
+            cat.added_by = request.user
+            cat.save()
+            messages.success(request, 'Category added successfully.')
+            return redirect('add_category')
+        else:
+            messages.error(request, 'Unable to add category. Please try again')
+            return redirect('add_category')
+
+    else:
+        categories = Category.objects.filter(added_by=request.user)
+        context = {
+            'categories' : categories
+        }
+        return render(request, 'add_category.html', context)
+
+
+@login_required(login_url='login')
+def add_cuisine(request):
+    if request.method == 'POST':
+        cuiform = CuisineForm(request.POST or None)
+        if cuiform.is_valid():
+            cui = cuiform.save(commit=False)
+            cui.added_by = request.user
+            cui.save()
+            messages.success(request, 'Cuisine added successfully.')
+            return redirect('add_cuisine')
+    else:
+        cuisines = Cuisine.objects.filter(added_by=request.user)
+        context = {
+            'cuisines' : cuisines
+        }
+        return render(request, 'add_cuisine.html', context)
+
+
+@login_required(login_url='login')
 def delete_item(request, item_id):
     item = ItemList.objects.get(pk=item_id)
     item.delete()
     return redirect('add_item')
 
 
+@login_required(login_url='login')
 def add_item_to_bill(request, item_id):
     global billItemList
     item = ItemList.objects.get(pk=item_id)
@@ -118,6 +167,7 @@ def add_item_to_bill(request, item_id):
     return render(request, 'menu_list.html', context)
 
 
+@login_required(login_url='login')
 def delete_item_from_bill(request, item_name):
     global billItemList
     for item in billItemList:
@@ -126,6 +176,7 @@ def delete_item_from_bill(request, item_name):
     return redirect('menu_list')
 
 
+@login_required(login_url='login')
 def generate_bill(request):
     global billItemList
     context = {
@@ -134,6 +185,8 @@ def generate_bill(request):
     print(billItemList)
     return render(request, 'bill.html', context)
 
+
+@login_required(login_url='login')
 def get_cost(request):
     cost = []
     if len(billItemList):
