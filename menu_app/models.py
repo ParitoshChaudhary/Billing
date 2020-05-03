@@ -36,4 +36,4 @@ class Item(models.Model):
 
     def __str__(self):
         value = str(self.name) + ' - ' + str(self.added_by)
-        return value
+        return self.name

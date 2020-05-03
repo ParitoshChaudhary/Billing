@@ -47,8 +47,12 @@ def add_item(request):
             if catform.is_valid():
                 print('======== CAT FORM IS VALID')
 
-            item.cuisine = Cuisine.objects.get(cuisine=cui)
-            item.category = Category.objects.get(category_type=cat)
+            sorted_cuisines = Cuisine.objects.filter(added_by=request.user)
+            sorted_category = Category.objects.filter(added_by=request.user)
+            # item.cuisine = Cuisine.objects.filter(cuisine=cui)
+            # item.category = Category.objects.filter(category_type=cat)
+            item.cuisine = sorted_cuisines.get(cuisine=cui)
+            item.category = sorted_category.get(category_type=cat)
             item.name = request.POST.get('name')
             item.cost = request.POST.get('cost')
             item.added_by = request.user
@@ -87,8 +91,12 @@ def edit_item(request, item_id):
             cui = cuisineform.save(commit=False)
             cat = catform.save(commit=False)
 
-            item.cuisine = Cuisine.objects.get(cuisine=cui)
-            item.category = Category.objects.get(category_type=cat)
+            sorted_cuisines = Cuisine.objects.filter(added_by=request.user)
+            sorted_category = Category.objects.filter(added_by=request.user)
+            # item.cuisine = Cuisine.objects.filter(cuisine=cui)
+            # item.category = Category.objects.filter(category_type=cat)
+            item.cuisine = sorted_cuisines.get(cuisine=cui)
+            item.category = sorted_category.get(category_type=cat)
             item.name = request.POST.get('name')
             item.cost = request.POST.get('cost')
             item.save()
