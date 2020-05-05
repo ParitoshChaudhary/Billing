@@ -8,10 +8,15 @@
 {% block content %}
     <br>
     <div class="container">
-        <form method="get">
-          {{ filter.form | crispy }}
-          <button class="btn btn-primary" name="submit">Search</button>
-        </form>
+        <br>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search this    blog">
+          <div class="input-group-append">
+            <button class="btn btn-secondary" type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
         <br>
         {% if bill_list %}
         <table class="table table-bordered">
@@ -59,7 +64,7 @@
                         <td>{{ item.category }}</td>
                         <td>{{ item.cost }}</td>
                         <td>
-                          <a href = "{% url 'add_item_to_bill' item.id %}" class="btn btn-success">Add</a>
+                          <a href = "{% url 'add_item_to_bill' item.id %}" class="btn btn-success">Add to bill</a>
                         </td>
                     </tr>
                 {% endfor %}
