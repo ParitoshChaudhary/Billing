@@ -207,3 +207,11 @@ def get_cost(request):
             'total_amt' : total
         }
     return render(request, 'bill.html', context)
+
+
+def search_name(request):
+    item_name = request.GET.get("item_name")
+    context = {
+
+    }
+    return render(request, 'menu_list.html', context)
