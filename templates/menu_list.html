@@ -2,79 +2,80 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-    <title>Menu</title>
+<title>Menu</title>
 {% endblock title %}
 
 {% block content %}
+<br>
+<div class="container">
     <br>
-    <div class="container">
-        <br>
-        <form method="GET">
-            <div class="form-row">
-                <div class="form-group col-12">
-                    <div class="input-group">
-                        <input class="form-control py-2 border-right-0 border" type="search" name="item_name" placeholder="Search By Item" />
-                        <span class="input-group-append">
-                            <div class="input-group-text bg-transparent">
-                                <i class="fa fa-search"></i>
-                            </div>
-                        </span>
-                    </div>
-                    <br>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-        <hr />
-        {% if bill_list %}
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Cost</th>
-                  <th scope="col">Options</th>
-                </tr>
-            </thead>
-            <tbody>
-              {% for item in bill_list%}
-              <tr>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.category }}</td>
-                  <td>{{ item.cost }}</td>
-                  <td>
+    <form method="GET">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="item_name"
+                        placeholder="Search By Item" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <hr />
+    {% if bill_list %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in bill_list%}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.cost }}</td>
+                <td>
                     <a href="{% url 'delete_item_from_bill' item.name %}" class="btn btn-danger">Remove</a>
-                  </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    {% endif %}
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Cuisine</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Cost</th>
-                    <th scope="col">Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.id }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.cuisine }}</td>
-                        <td>{{ item.category }}</td>
-                        <td>{{ item.cost }}</td>
-                        <td>
-                          <a href = "{% url 'add_item_to_bill' item.id %}" class="btn btn-success">Add to bill</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Cuisine</th>
+                <th scope="col">Category</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.cuisine }}</td>
+                <td>{{ item.category }}</td>
+                <td>{{ item.cost }}</td>
+                <td>
+                    <a href="{% url 'add_item_to_bill' item.id %}" class="btn btn-success">Add to bill</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock content %}

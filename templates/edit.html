@@ -5,36 +5,36 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="container">
-      <form method="POST">
-          {% csrf_token %}
-          <div class="form-group">
-              <label>Edit Item</label>
-              <input type="text" class="form-control" placeholder='{{ items.name }}' name="name" value="{{ items.name }}">
-          </div>
-          <div class="form-group">
-              <label for="inputState">Cuisine</label>
-              <select id="inputState" class="form-control" name="cuisine">
-                  <option selected> {{ items.cuisine }}</option>
-                  {% for item in cuisine %}
-                      <option>{{ item.cuisine }}</option>
-                  {% endfor %}
-              </select>
-          </div>
-          <div class="form-group">
-              <label for="inputState">Category</label>
-              <select id="inputState" class="form-control" name="category_type">
-                  <option selected> {{ items.category }}</option>
-                  {% for item in categories %}
-                      <option>{{ item.category_type }}</option>
-                  {% endfor %}
-              </select>
-          </div>
-          <div class="form-group">
-              <label for="inputState">Cost</label>
-              <input type="text" class="form-control" placeholder="{{ items.cost }}" name="cost" value="{{ items.cost }}">
-          </div>
-          <button type="submit" class="btn btn-primary">Update Item</button>
-      </form>
-    </div>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Edit Item</label>
+            <input type="text" class="form-control" placeholder='{{ items.name }}' name="name" value="{{ items.name }}">
+        </div>
+        <div class="form-group">
+            <label for="inputState">Cuisine</label>
+            <select id="inputState" class="form-control" name="cuisine">
+                <option selected> {{ items.cuisine }}</option>
+                {% for item in cuisine %}
+                <option>{{ item.cuisine }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputState">Category</label>
+            <select id="inputState" class="form-control" name="category_type">
+                <option selected> {{ items.category }}</option>
+                {% for item in categories %}
+                <option>{{ item.category_type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputState">Cost</label>
+            <input type="text" class="form-control" placeholder="{{ items.cost }}" name="cost" value="{{ items.cost }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Item</button>
+    </form>
+</div>
 {% endblock content %}
