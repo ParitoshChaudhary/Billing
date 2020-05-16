@@ -24,10 +24,7 @@ def menu_list(request):
     item_list = paginator.get_page(page)
 
     context = {
-        'items': item_list,
-        'category': category,
-        'cuisine': cuisine,
-        'filter' : filter
+        'items': item_list
     }
     return render(request, 'menu_list.html', context)
 
@@ -209,9 +206,24 @@ def get_cost(request):
     return render(request, 'bill.html', context)
 
 
-def search_name(request):
-    item_name = request.GET.get("item_name")
-    context = {
+def is_valid_query_param(param):
+    return param != '' and param is not None
+    
 
+def search_name(request):
+    qs = ItemList.objects.filter(added_by=request.user)
+    categories = Category.objects.filter(added_by=request.user)
+    item_name = request.GET.get("item_name")
+    category_type = request.GET.get("category_type")
+
+    if is_valid_query_param(item_name):
+        qs = qs.filter(name__icontains = item_name)
+
+    # if is_valid_query_param(category_type) and category_type != 'Choose...':
+    #     qs = qs.get(Item__category__icontains=category_type)
+    #     print(qs)
+
+    context = {
+            'items' : qs
     }
     return render(request, 'menu_list.html', context)
