@@ -51,6 +51,8 @@ class Restraunt(PermissionsMixin, AbstractBaseUser):
     restraunt_name = models.CharField(verbose_name='restraunt name', max_length=60)
     address = models.CharField(verbose_name='address', max_length=150)
     manager_name = models.CharField(verbose_name='manager', max_length=50)
+    state_gst = models.IntegerField(verbose_name='SGST', null=True)
+    centre_gst = models.IntegerField(verbose_name='CGST', null=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

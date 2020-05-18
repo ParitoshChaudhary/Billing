@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>View Bills</title>
+{% endblock title %}
+
+{% block content %}
+<br>
+<div class='container'>
+    {% if  bill_list%}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in bill_list %}
+                    <tr>
+                        <td>{{ item.generated_on }}</td>
+                        <td> 
+                            {% for i in item.items.all %}
+                                <li>{{ i }}</li>
+                            {% endfor %} 
+                            
+                        </td>
+                        <td>{{ item.total_cost }}</td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock content %}
