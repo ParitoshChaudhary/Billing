@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
 from django import forms
+from user_app.models import Profile
 
 User = get_user_model()
 
@@ -91,3 +92,20 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', strip=True)
     password = forms.CharField(widget=forms.PasswordInput)
+    
+    
+class UserUpdateForm(forms.ModelForm):
+    username = forms.CharField(max_length=25, strip=True)
+    email = forms.EmailField()
+    phone = forms.IntegerField()
+    restraunt_name = forms.CharField(max_length=40, strip=True)
+    
+    class Meta:
+        model = User
+        fields = ('username', 'phone', 'restraunt_name', 'email')
+        
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['image', 'address', 'manager_name', 'state_gst', 'centre_gst']
