@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from user_app.forms import UserAdminCreationForm, UserAdminChangeForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from user_app.models import UserRestrauntManager
+from user_app.models import UserRestrauntManager, Profile
 
 # Register your models here.
 User = get_user_model()
@@ -38,5 +38,7 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserRestrauntManager)
+admin.site.register(Profile)
+
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)

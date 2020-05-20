@@ -11,6 +11,7 @@ urlpatterns = [
     path('register/', views.registerUser, name='register'),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
-]
+    path('profile/', views.profile, name='profile'),
+] 
 
 admin.autodiscover()

@@ -49,10 +49,6 @@ class Restraunt(PermissionsMixin, AbstractBaseUser):
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     phone = models.CharField(verbose_name='phone number', max_length=13)
     restraunt_name = models.CharField(verbose_name='restraunt name', max_length=60)
-    address = models.CharField(verbose_name='address', max_length=150)
-    manager_name = models.CharField(verbose_name='manager', max_length=50)
-    state_gst = models.IntegerField(verbose_name='SGST', null=True)
-    centre_gst = models.IntegerField(verbose_name='CGST', null=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -74,6 +70,14 @@ class Restraunt(PermissionsMixin, AbstractBaseUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(Restraunt, on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name='Profile Pics', default='default.png', null=True)
+    address = models.CharField(verbose_name='address', max_length=150, null=True)
+    manager_name = models.CharField(verbose_name='manager', max_length=50, null=True)
+    state_gst = models.IntegerField(verbose_name='SGST', null=True)
+    centre_gst = models.IntegerField(verbose_name='CGST', null=True)
+    
+    def __str__(self):
+        return f'{self.user.restraunt_name} Profile'
 
 
 class UserRestrauntManager(models.Model):

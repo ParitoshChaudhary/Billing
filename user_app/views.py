@@ -4,6 +4,7 @@ from user_app.forms import RegisterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from menu_app.decorators import check_authentication
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -50,6 +51,12 @@ def registerUser(request):
         'form' : form
     }
     return render(request, 'register.html', context)
+
+
+@login_required(login_url='login')
+def profile(request):
+    print(request.user.profile.image)
+    return render(request, 'profile.html')
 
 
 def contact(request):
