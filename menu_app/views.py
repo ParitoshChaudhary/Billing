@@ -191,6 +191,16 @@ def generate_bill(request):
     return render(request, 'bill.html', context)
 
 
+def calculate_state_tax(price):
+    state_tax = .09
+    return price * state_tax
+
+
+def calculate_country_tax(price):
+    country_tax = .09
+    return price * country_tax
+
+
 @login_required(login_url='login')
 def get_cost(request):
     cost = []
@@ -198,11 +208,26 @@ def get_cost(request):
         for item in billItemList:
             cost.append(item.cost)
         print(cost)
-        total = sum(cost)
-        print(total)
-        context = {
-            'total_amt' : total
-        }
+        if request.user.profile.add_tax:
+            sum_cost = sum(cost)
+            state_tax = calculate_state_tax(sum_cost)
+            country_tax = calculate_country_tax(sum_cost)
+            total = sum_cost + state_tax + country_tax
+            context = {
+            'total_amt' : total,
+            'base_cost' : sum_cost
+            }
+            
+        else:
+            sum_cost = sum(cost)
+            state_tax = calculate_state_tax(sum_cost)
+            country_tax = calculate_country_tax(sum_cost)
+            base_cost = sum_cost - (state_tax + country_tax)
+            context = {
+                'total_amt' : sum_cost,
+                'base_cost' : base_cost
+            }
+    
     return render(request, 'bill.html', context)
 
 

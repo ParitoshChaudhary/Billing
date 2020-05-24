@@ -76,6 +76,7 @@ class Profile(models.Model):
     state_gst = models.IntegerField(verbose_name='SGST', null=True)
     centre_gst = models.IntegerField(verbose_name='CGST', null=True)
     image = models.ImageField(verbose_name='Profile Pics', default='default.png', null=True)
+    add_tax = models.BooleanField(default=False)
     
     def __str__(self):
         return f'{self.user.restraunt_name} Profile'
