@@ -24,7 +24,7 @@ python-jsonrpc-server==0.3.4
 python-language-server==0.31.9
 pytz==2019.3
 six==1.14.0
-sqlparse==0.2.4
+sqlparse==0.4.4
 toml==0.10.1
 tqdm==4.42.0
 ujson==1.35
